@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Geovisualization Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --parchment:   #f5efe3;
+      --ink:         #1e1a14;
+      --sienna:      #8b4c2a;
+      --moss:        #4a5c3f;
+      --sand:        #c9a96e;
+      --cream:       #fdf8ef;
+      --rule:        #c4ad89;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--parchment);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Decorative background grid (topographic feel) ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(196,173,137,.18) 39px, rgba(196,173,137,.18) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(196,173,137,.12) 39px, rgba(196,173,137,.12) 40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 3.5rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 2px solid var(--rule);
+    }
+
+    .eyebrow {
+      font-size: .75rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--sienna);
+      margin-bottom: .6rem;
+      opacity: 0;
+      animation: fadeUp .6s .1s forwards;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ink);
+      opacity: 0;
+      animation: fadeUp .6s .25s forwards;
+    }
+
+    header h1 span { color: var(--sienna); }
+
+    .subtitle {
+      margin-top: .8rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--moss);
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp .6s .4s forwards;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── PROJECT CARD ── */
+    .card {
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 6px 6px 0 rgba(139,76,42,.12);
+      opacity: 0;
+      animation: fadeUp .7s .55s forwards;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    /* ── IMAGE AREA ── */
+    .card-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      overflow: hidden;
+      background: var(--ink);
+    }
+
+    /* SVG placeholder map that looks like a choropleth */
+    .placeholder-map {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .img-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(30,26,20,.82));
+      color: #f5efe3;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .6rem 1rem;
+    }
+
+    /* Swap-image hint */
+    .swap-hint {
+      position: absolute;
+      top: .7rem; right: .8rem;
+      background: rgba(245,239,227,.88);
+      color: var(--sienna);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .25rem .55rem;
+      border-radius: 2px;
+      border: 1px solid var(--sand);
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .swap-hint:hover { background: var(--sand); color: var(--ink); }
+
+    /* Hidden file input */
+    #imgInput { display: none; }
+
+    /* ── TEXT BODY ── */
+    .card-body {
+      padding: 2rem 2.2rem 2.4rem;
+      display: grid;
+      gap: 1.4rem;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem .9rem;
+      align-items: center;
+    }
+
+    .tag {
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      padding: .22rem .6rem;
+      border-radius: 2px;
+    }
+    .tag-type  { background: var(--moss);   color: #fff; }
+    .tag-tool  { background: var(--sand);   color: var(--ink); }
+    .tag-class { background: transparent;   color: var(--sienna); border: 1px solid var(--sienna); }
+
+    .card-body h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: var(--sienna);
+      border: none;
+      margin: 0;
+    }
+
+    .card-body p {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: #3a3428;
+      font-weight: 300;
+    }
+
+    .card-body p + p { margin-top: -.2rem; }
+
+    /* ── DATA HIGHLIGHTS ── */
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: .8rem;
+      margin-top: .4rem;
+    }
+
+    .hl-box {
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--sienna);
+      padding: .7rem .9rem;
+      background: var(--parchment);
+    }
+
+    .hl-label {
+      font-size: .65rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--moss);
+      display: block;
+      margin-bottom: .2rem;
+    }
+
+    .hl-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--sienna);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 1.4rem;
+      border-top: 1px solid var(--rule);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      color: var(--moss);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .card-body { padding: 1.4rem 1.2rem 1.8rem; }
+      header { padding: 2.2rem 1rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">SEES 3540 · Geovisualization</p>
+  <h1>Spatial <span>Stories</span></h1>
+  <p class="subtitle">A portfolio of maps, data, and geographic insight</p>
+</header>
+
+<main>
+  <div class="card">
+
+    <!-- Image -->
+    <div class="card-img-wrap">
+      <!-- SVG placeholder choropleth-style map -->
+      <svg class="placeholder-map" id="mapImg" viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="900" height="350" fill="#1e1a14"/>
+        <!-- Simulated county patches in choropleth palette -->
+        <g opacity=".9">
+          <!-- Row 1 -->
+          <rect x="0"   y="0"   width="90" height="70" fill="#4a5c3f"/>
+          <rect x="90"  y="0"   width="90" height="70" fill="#6b7c5a"/>
+          <rect x="180" y="0"   width="90" height="70" fill="#8b4c2a"/>
+          <rect x="270" y="0"   width="90" height="70" fill="#c9a96e"/>
+          <rect x="360" y="0"   width="90" height="70" fill="#4a5c3f"/>
+          <rect x="450" y="0"   width="90" height="70" fill="#6b7c5a"/>
+          <rect x="540" y="0"   width="90" height="70" fill="#a3622e"/>
+          <rect x="630" y="0"   width="90" height="70" fill="#c9a96e"/>
+          <rect x="720" y="0"   width="90" height="70" fill="#6b7c5a"/>
+          <rect x="810" y="0"   width="90" height="70" fill="#4a5c3f"/>
+          <!-- Row 2 -->
+          <rect x="0"   y="70"  width="90" height="70" fill="#c9a96e"/>
+          <rect x="90"  y="70"  width="90" height="70" fill="#8b4c2a"/>
+          <rect x="180" y="70"  width="90" height="70" fill="#6b7c5a"/>
+          <rect x="270" y="70"  width="90" height="70" fill="#4a5c3f"/>
+          <rect x="360" y="70"  width="90" height="70" fill="#a3622e"/>
+          <rect x="450" y="70"  width="90" height="70" fill="#c9a96e"/>
+          <rect x="540" y="70"  width="90" height="70" fill="#4a5c3f"/>
+          <rect x="630" y="70"  width="90" height="70" fill="#8b4c2a"/>
+          <rect x="720" y="70"  width="90" height="70" fill="#6b7c5a"/>
+          <rect x="810" y="70"  width="90" height="70" fill="#c9a96e"/>
+          <!-- Row 3 -->
+          <rect x="0"   y="140" width="90" height="70" fill="#6b7c5a"/>
+          <rect x="90"  y="140" width="90" height="70" fill="#c9a96e"/>
+          <rect x="180" y="140" width="90" height="70" fill="#4a5c3f"/>
+          <rect x="270" y="140" width="90" height="70" fill="#8b4c2a"/>
+          <rect x="360" y="140" width="90" height="70" fill="#c9a96e"/>
+          <rect x="450" y="140" width="90" height="70" fill="#6b7c5a"/>
+          <rect x="540" y="140" width="90" height="70" fill="#a3622e"/>
+          <rect x="630" y="140" width="90" height="70" fill="#4a5c3f"/>
+          <rect x="720" y="140" width="90" height="70" fill="#c9a96e"/>
+          <rect x="810" y="140" width="90" height="70" fill="#6b7c5a"/>
+          <!-- Row 4 -->
+          <rect x="0"   y="210" width="90" height="70" fill="#8b4c2a"/>
+          <rect x="90"  y="210" width="90" height="70" fill="#4a5c3f"/>
+          <rect x="180" y="210" width="90" height="70" fill="#c9a96e"/>
+          <rect x="270" y="210" width="90" height="70" fill="#6b7c5a"/>
+          <rect x="360" y="210" width="90" height="70" fill="#4a5c3f"/>
+          <rect x="450" y="210" width="90" height="70" fill="#8b4c2a"/>
+          <rect x="540" y="210" width="90" height="70" fill="#c9a96e"/>
+          <rect x="630" y="210" width="90" height="70" fill="#6b7c5a"/>
+          <rect x="720" y="210" width="90" height="70" fill="#8b4c2a"/>
+          <rect x="810" y="210" width="90" height="70" fill="#4a5c3f"/>
+          <!-- Row 5 -->
+          <rect x="0"   y="280" width="90" height="70" fill="#c9a96e"/>
+          <rect x="90"  y="280" width="90" height="70" fill="#6b7c5a"/>
+          <rect x="180" y="280" width="90" height="70" fill="#8b4c2a"/>
+          <rect x="270" y="280" width="90" height="70" fill="#4a5c3f"/>
+          <rect x="360" y="280" width="90" height="70" fill="#c9a96e"/>
+          <rect x="450" y="280" width="90" height="70" fill="#a3622e"/>
+          <rect x="540" y="280" width="90" height="70" fill="#6b7c5a"/>
+          <rect x="630" y="280" width="90" height="70" fill="#c9a96e"/>
+          <rect x="720" y="280" width="90" height="70" fill="#4a5c3f"/>
+          <rect x="810" y="280" width="90" height="70" fill="#8b4c2a"/>
+        </g>
+        <!-- Grid lines to suggest county borders -->
+        <g stroke="#1e1a14" stroke-width="1.5" opacity=".55">
+          <line x1="90"  y1="0" x2="90"  y2="350"/>
+          <line x1="180" y1="0" x2="180" y2="350"/>
+          <line x1="270" y1="0" x2="270" y2="350"/>
+          <line x1="360" y1="0" x2="360" y2="350"/>
+          <line x1="450" y1="0" x2="450" y2="350"/>
+          <line x1="540" y1="0" x2="540" y2="350"/>
+          <line x1="630" y1="0" x2="630" y2="350"/>
+          <line x1="720" y1="0" x2="720" y2="350"/>
+          <line x1="810" y1="0" x2="810" y2="350"/>
+          <line x1="0" y1="70"  x2="900" y2="70"/>
+          <line x1="0" y1="140" x2="900" y2="140"/>
+          <line x1="0" y1="210" x2="900" y2="210"/>
+          <line x1="0" y1="280" x2="900" y2="280"/>
+        </g>
+        <!-- Legend bar -->
+        <defs>
+          <linearGradient id="leg" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#fdf8ef"/>
+            <stop offset="50%"  stop-color="#c9a96e"/>
+            <stop offset="100%" stop-color="#8b4c2a"/>
+          </linearGradient>
+        </defs>
+        <rect x="20" y="295" width="120" height="10" rx="2" fill="url(#leg)" opacity=".9"/>
+        <text x="20"  y="322" fill="#f5efe3" font-size="9" font-family="Georgia,serif" opacity=".8">Low</text>
+        <text x="122" y="322" fill="#f5efe3" font-size="9" font-family="Georgia,serif" opacity=".8" text-anchor="end">High</text>
+        <text x="71" y="286" fill="#f5efe3" font-size="10" font-family="Georgia,serif" opacity=".7" text-anchor="middle">Value</text>
+      </svg>
+
+      <!-- Actual image (hidden until user uploads) -->
+      <img id="uploadedImg" src="" alt="Project map"
+        style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"/>
+
+      <span class="swap-hint" onclick="document.getElementById('imgInput').click()">
+        📁 Replace image
+      </span>
+      <input type="file" id="imgInput" accept="image/*"/>
+
+      <div class="img-caption">Choropleth Map · County-Level Data</div>
+    </div>
+
+    <!-- Text body -->
+    <div class="card-body">
+
+      <div class="project-meta">
+        <span class="tag tag-type">Choropleth Map</span>
+        <span class="tag tag-tool">D3.js · Observable</span>
+        <span class="tag tag-class">SEES 3540</span>
+      </div>
+
+      <h2>Project Title Goes Here</h2>
+      <hr class="divider"/>
+
+      <p>
+        Replace this text with a brief description of your project. What geographic phenomenon
+        did you map? Where is the study area, and what time period does the data cover? A sentence
+        or two on the dataset source and why you chose it works well here.
+      </p>
+      <p>
+        Then describe what the map <em>shows</em> — what spatial patterns emerge, which regions
+        stand out, and what a viewer should take away. This is also a good place to mention any
+        design or classification decisions you made (e.g., natural breaks vs. equal intervals)
+        and why they matter for reading the map accurately.
+      </p>
+
+      <div class="highlights">
+        <div class="hl-box">
+          <span class="hl-label">Data Source</span>
+          <span class="hl-value">US Census</span>
+        </div>
+        <div class="hl-box">
+          <span class="hl-label">Study Area</span>
+          <span class="hl-value">Nebraska</span>
+        </div>
+        <div class="hl-box">
+          <span class="hl-label">Map Type</span>
+          <span class="hl-value">Choropleth</span>
+        </div>
+        <div class="hl-box">
+          <span class="hl-label">Year</span>
+          <span class="hl-value">2024</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  T.J. · SEES 3540 Geovisualization · Spring 2025
+</footer>
+
+<script>
+  // ── Image upload / swap ──
+  const imgInput   = document.getElementById('imgInput');
+  const uploadedImg = document.getElementById('uploadedImg');
+  const svgMap     = document.getElementById('mapImg');
+  const caption    = document.querySelector('.img-caption');
+
+  imgInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    uploadedImg.src = url;
+    uploadedImg.style.display = 'block';
+    svgMap.style.display = 'none';
+    caption.textContent = file.name.replace(/\.[^.]+$/, '');
+  });
+
+  // ── Make highlight boxes & tags inline-editable on click ──
+  document.querySelectorAll('.hl-value, .card-body h2, .card-body p, .hl-label, .tag, .img-caption').forEach(el => {
+    el.title = 'Click to edit';
+    el.style.cursor = 'text';
+    el.setAttribute('contenteditable', 'true');
+    el.addEventListener('focus', () => el.style.outline = '2px dashed #c9a96e');
+    el.addEventListener('blur',  () => el.style.outline = 'none');
+  });
+
+  // ── Subtle entrance stagger on card highlights ──
+  document.querySelectorAll('.hl-box').forEach((box, i) => {
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(10px)';
+    box.style.transition = `opacity .4s ${.65 + i * .1}s, transform .4s ${.65 + i * .1}s`;
+    setTimeout(() => {
+      box.style.opacity = '1';
+      box.style.transform = 'translateY(0)';
+    }, 10);
+  });
+</script>
+</body>
+</html>
