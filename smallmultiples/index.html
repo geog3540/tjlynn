@@ -84,21 +84,6 @@
 				<div class="col-sm-6">
 					<span><p><h3 class='mapTitle'>Poverty Rate </h3> Percentage of population under the poverty level.</p></span>
 					<div id="divMap1"></div>
-					
-<head>
-  <style>
-    #divMap2 {
-      height: 400px;
-      width: 100%;
-    }
-
-    #divHist2 {
-      height: 400px;
-      width: 100%;
-    }
-  </style>
-</head>
-
 					<div id="divHist1"></div>
 				</div>
 				<div class="col-sm-6">
@@ -154,10 +139,10 @@
 	// att1format: enter the d3.format string to display the variables in the format you like
 	// Check this link on how to specify the desired format:
 	// https://observablehq.com/@d3/d3-format
-	var att1 = 'below_poverty_count', att1alias = 'Percentage Bellow Poverty Level', att1format = '.1f',
-	att2 = 'avg_household_income', att2alias =  'Average Household Income', att2format = '.0f',
-	att3 = 'hs_graduation_rate_pct', att3alias = 'Highschool Greaduation Rate %', att3format = '.1f',
-	att4 = 'foreign_born_count', att4alias = '% Foriegn Born', att4format = '.1f';
+	var att1 = 'Mbelow_poverty_count', att1alias = 'Percentage Bellow Poverty Level', att1format = '.1f',
+	att2 = 'Mavg_household_income', att2alias =  'Average Household Income', att2format = '.0f',
+	att3 = 'Mhs_graduation_rate_pct', att3alias = 'Highschool Greaduation Rate %', att3format = '.1f',
+	att4 = 'Mforeign_born_count', att4alias = '% Foriegn Born', att4format = '.1f';
 
   // enter below all variables that should be recalculated. The order of attributes should match with
 	// the list of multiply and divide by values
@@ -169,7 +154,7 @@
 	// Enter the attribute name that you want to normalize (divide by).
 	// If you want to only multiply an attribute but not divide by another attribute
 	// then simply put null as the attribute name in the same order of the attribute.
-	var divideBy = ['poverty_universe_total', 'total_population'];
+	var divideBy = ['Mpoverty_universe_total', 'Mtotal_population'];
 	// if your variables are not raw counts and they are already normalized, comment out above, and
 	//uncomment below:
 	// var attributesToBeNormalized = [];
