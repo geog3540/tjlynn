@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Thomas Lynn Geographic Visualisation Portfolio</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/3-col-portfolio.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Thomas's Portfolio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="files/Thomas_Lynn_Resume.pdf">Resume (CV)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="mailto:thomasjlynn06@gmail.com">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Page Heading -->
+      <h1 class="my-4">Thomas (T.J.)  Lynn
+        <small> Cartographer</small>
+             
+      </h1>
+
+      <div class="row">
+        <div class="col-lg-4 col-sm-6 portfolio-item">
+         <a href="Files/projectfile.json"><img class="card-img-top" src="Images/map.png" alt=""></a>
+        </div>
+        <p class="card-text"> For the choropleth base map, I used a diverging color scheme and manual breaks for
+easier readability and perception. The attribute mapped is Net internal Migration flow,
+this shows which providences people are moving too or away from. There is an issue
+with the data, several providences had no data for this variable making the map
+incomplete, the other data for the nodes was able to cover some of these areas but not
+all. I used a blue- red diverging scheme because of previous class discussions on color
+perception. I feel like people often perceive more blue hues as less magnitude and red
+hues as higher magnitude. I used this to my advantage to make it easy to see where
+people are leaving vs migrating too. White works well as a good natural middle color. I
+used natural breaks because the scale of migration was difficult to classify with other
+methods. Specifically, I wanted to be able to make a class around 0 but not split at zero.
+Creating a class from –50k to 50k shows the areas where there is negligible migration.
+The providences of China are very well populated so a 50k difference is not as
+noticeable in a wide scale. The other classes were created to show the magnitude of
+people migrating.
+For the nodes on the map, I used quantile classification and a continues purple color
+scheme. The nodes are a relative location because that is what the data I was given had.
+This works because we are looking at providence wide data not city. The graduated
+symbols and change in color make it easy to tell which class lines up with which point
+and the difference is intuitive. The purple color scheme was arbitrary, however matching
+the flow lines was not. Some issues with the size of the nodes arrived from overlapping
+but I decided that it was better to have some overlap than to make the nodes harder to
+tell apart. I used quantile classification to show where the most and least people are
+going which I feel aids in interpretation.
+For the flow lines I used curved, asymmetric flow lines which were found in the 2017
+study to be the most effective for directional perception. The gradual color scheme also
+helps to display the change in magnitude between the lines. I chose the purple color
+scheme to match the nodes, which creates an interesting visual as you can see the
+thicker, purple lines going into the large purple nodes. I used a white outline on the flow
+lines because it seemed to limit simultaneous contrast. The black outlines seemed to
+affect the perception of the color of the flow lines, at least for me.
+Overall, there are some issues with this map especially clutter in the eastern
+providences. It was difficult to make decisions on how to cut the map down without
+sacrificing interpretation. I moved down the flow lines to the top 80 which I liked
+because it still showed the areas where only a few thousand people were going. Also
+lines that flow in 2 directions make it more difficult to read. The paper mentions that
+long lines are more prominent than shorter ones, drawing more attention and making
+them perceive higher in magnitude. </p>
+             
+      </div>
+      <!-- /.row -->
+
+      <!-- Pagination -->
+      <ul class="pagination justify-content-center">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Thomas Lynn 2026</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>
