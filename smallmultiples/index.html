@@ -84,6 +84,21 @@
 				<div class="col-sm-6">
 					<span><p><h3 class='mapTitle'>Poverty Rate </h3> Percentage of population under the poverty level.</p></span>
 					<div id="divMap1"></div>
+					
+<head>
+  <style>
+    #divMap2 {
+      height: 400px;
+      width: 100%;
+    }
+
+    #divHist2 {
+      height: 400px;
+      width: 100%;
+    }
+  </style>
+</head>
+
 					<div id="divHist1"></div>
 				</div>
 				<div class="col-sm-6">
@@ -154,7 +169,7 @@
 	// Enter the attribute name that you want to normalize (divide by).
 	// If you want to only multiply an attribute but not divide by another attribute
 	// then simply put null as the attribute name in the same order of the attribute.
-	var divideBy = ['total_population', 'total_population'];
+	var divideBy = ['poverty_universe_total', 'total_population'];
 	// if your variables are not raw counts and they are already normalized, comment out above, and
 	//uncomment below:
 	// var attributesToBeNormalized = [];
