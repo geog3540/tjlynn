@@ -60,7 +60,19 @@
       <div class="row">
          <h2 class="my-4"> China Internal Migration Flow Map</h2>
          <a href="Files/projectfile.json"> <img class="card-img-top" src="Images/map.png" alt="" ></a>
-        
+        <script>
+function downloadFile() {
+  fetch('projectfile.json')
+    .then(response => response.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'projectfile.json';
+      a.click();
+    });
+}
+</script>
         <p class="card-text"> For the choropleth base map, I used a diverging color scheme and manual breaks for
 easier readability and perception. The attribute mapped is Net internal Migration flow,
 this shows which providences people are moving too or away from. There is an issue
