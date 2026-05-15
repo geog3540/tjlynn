@@ -352,7 +352,7 @@
 						map.append('path')
 						.attr("class", function(e) { return classPolygon(e, d.map); })
 						.on('mouseover', function(e) { return mouseOver2(e, dependent); })
-						.on('mouseout', mouseOut)
+						.on('mouseout', function(d) { mouseOut(d); })
 						.on('mousemove', mousemoveFunc)
 						.attr("d", proj)
 						.style('fill', function(c) {
